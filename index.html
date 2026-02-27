@@ -1,19 +1,41 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Splash Campaigns | ريدج ريمون</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #2563eb;
-            --dark-color: #1e293b;
-            --bg-light: #f8fafc;
-            --text-gray: #64748b;
+    <meta name="description"
+        content="Splash Campaigns - Professional WhatsApp Marketing Software. Bulk WhatsApp Sender with Multi-Device Rotation, Smart Delays, and Zero Bans Technology.">
+    <meta name="keywords"
+        content="WhatsApp Marketing Software, Bulk WhatsApp Sender, Splash Campaigns, WhatsApp Marketing Platform, Bulk Messaging Tool">
+    <meta name="author" content="Splash Campaigns">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Splash Campaigns - WhatsApp Marketing Software">
+    <meta property="og:description"
+        content="Professional WhatsApp Marketing Platform with Multi-Device Rotation and Zero Bans Technology">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://splashcampaigns.com">
+    <meta property="og:image" content="assets/dashboard.png">
+    <title>Splash Campaigns - WhatsApp Marketing Software | Bulk WhatsApp Sender</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 'sans': ['Inter', 'sans-serif'] },
+                    colors: {
+                        'brand': { 50: '#f0fdf4', 100: '#dcfce7', 500: '#22c55e', 600: '#16a34a', 700: '#15803d' },
+                        'dark': { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e293b', 900: '#0f172a', 950: '#020617' }
+                    }
+                }
+            }
         }
-
+    </script>
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -21,184 +43,780 @@
         }
 
         body {
-            font-family: 'Cairo', sans-serif;
-            line-height: 1.6;
-            background-color: #fff;
-            color: var(--dark-color);
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            min-height: 100vh;
+            color: #f1f5f9;
         }
 
-        /* Hero Section */
-        .hero {
-            padding: 80px 20px;
-            text-align: center;
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
         }
 
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: var(--primary-color);
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
         }
 
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--text-gray);
-            max-width: 600px;
-            margin: 0 auto 30px;
-        }
-
-        /* Partners Section */
-        .partners {
-            padding: 60px 20px;
-            background-color: #fff;
-            text-align: center;
-        }
-
-        .partners h2 {
-            font-size: 1.8rem;
-            margin-bottom: 40px;
-            position: relative;
-        }
-
-        .partners h2::after {
+        .animated-bg::before {
             content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 30%, rgba(34, 197, 94, 0.15) 0%, transparent 50%), radial-gradient(circle at 70% 70%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(-5%, -5%);
+            }
+        }
+
+        .glow-green {
+            box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
+        }
+
+        .glow-blue {
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .screenshot-slider {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screenshot-slide {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .screenshot-slide.active {
             display: block;
-            width: 50px;
-            height: 4px;
-            background: var(--primary-color);
-            margin: 10px auto;
-            border-radius: 2px;
         }
 
-        .logos-grid {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 40px;
-            max-width: 1100px;
-            margin: 0 auto;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
-        .logo-item {
-            flex: 1 1 150px;
-            max-width: 180px;
-            display: flex;
-            justify-content: center;
+        ::-webkit-scrollbar {
+            width: 8px;
         }
 
-        .logo-item img {
-            max-width: 100%;
-            height: auto;
-            filter: grayscale(100%);
-            opacity: 0.6;
-            transition: all 0.4s ease;
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
         }
 
-        .logo-item img:hover {
-            filter: grayscale(0%);
-            opacity: 1;
-            transform: translateY(-5px);
+        ::-webkit-scrollbar-thumb {
+            background: #22c55e;
+            border-radius: 4px;
         }
 
-        /* Features/Assets Preview */
-        .features {
-            padding: 80px 20px;
-            background-color: var(--bg-light);
+        .gradient-text {
+            background: linear-gradient(135deg, #22c55e 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
+        .btn-primary {
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(34, 197, 94, 0.4);
         }
 
         .feature-card {
-            background: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            transition: all 0.3s ease;
         }
 
-        .feature-card img {
-            width: 100%;
-            border-radius: 8px;
-            margin-bottom: 15px;
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(34, 197, 94, 0.5);
         }
 
-        footer {
-            padding: 40px;
-            text-align: center;
-            background: var(--dark-color);
-            color: white;
+        .pricing-card {
+            transition: all 0.3s ease;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
+        .pricing-card:hover {
+            transform: scale(1.02);
+        }
 
-            .logos-grid {
-                gap: 20px;
-            }
+        .testimonial-card {
+            transition: all 0.3s ease;
+        }
 
-            .logo-item {
-                flex: 1 1 120px;
-            }
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+
+        nav {
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slider-dot.active {
+            background: #22c55e;
+            transform: scale(1.2);
+        }
+
+        .download-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn .os-icon {
+            transition: all 0.3s;
+        }
+
+        .download-btn .btn-text {
+            transition: all 0.3s;
         }
     </style>
 </head>
 
-<body>
+<body class="antialiased">
+    <div class="animated-bg"></div>
 
-    <section class="hero">
-        <h1>Splash Campaigns</h1>
-        <p>المنصة المتكاملة لإدارة حملاتك الإعلانية واستهداف عملائك بدقة واحترافية.</p>
-    </section>
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 py-4">
+        <div class="container mx-auto px-6">
+            <div class="flex items-center justify-between">
+                <a href="#" class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center">
+                        <i class="fab fa-whatsapp text-white text-xl"></i>
+                    </div>
+                    <span class="text-xl font-bold text-white">Splash Campaigns</span>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#features" class="text-gray-300 hover:text-brand-500 transition">Features</a>
+                    <a href="#screenshots" class="text-gray-300 hover:text-brand-500 transition">Screenshots</a>
+                    <a href="#testimonials" class="text-gray-300 hover:text-brand-500 transition">Testimonials</a>
+                    <a href="#pricing" class="text-gray-300 hover:text-brand-500 transition">Pricing</a>
+                </div>
+                <a href="#pricing"
+                    class="hidden md:inline-flex items-center gap-2 px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition btn-primary">
+                    <i class="fas fa-download"></i> Download Now
+                </a>
+                <button id="mobileMenuBtn" class="md:hidden text-white text-2xl"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+        <div id="mobileMenu"
+            class="hidden md:hidden absolute top-full left-0 right-0 bg-dark-900/95 backdrop-blur-lg border-t border-dark-700">
+            <div class="container mx-auto px-6 py-4 flex flex-col gap-4">
+                <a href="#features" class="text-gray-300 hover:text-brand-500 transition py-2">Features</a>
+                <a href="#screenshots" class="text-gray-300 hover:text-brand-500 transition py-2">Screenshots</a>
+                <a href="#testimonials" class="text-gray-300 hover:text-brand-500 transition py-2">Testimonials</a>
+                <a href="#pricing" class="text-gray-300 hover:text-brand-500 transition py-2">Pricing</a>
+                <button onclick="smartDownload()"
+                    class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-600 text-white font-semibold rounded-xl">
+                    <i class="fas fa-download"></i> Download Now
+                </button>
+            </div>
+        </div>
+    </nav>
 
-    <section class="partners">
-        <h2>الشركات المتعاقدة معنا</h2>
-        <div class="logos-grid">
-            <div class="logo-item">
-                <img src="assets/company/logo1.png" alt="Company 1">
-            </div>
-            <div class="logo-item">
-                <img src="assets/company/logo2.png" alt="Company 2">
-            </div>
-            <div class="logo-item">
-                <img src="assets/company/logo3.png" alt="Company 3">
-            </div>
-            <div class="logo-item">
-                <img src="assets/company/logo4.png" alt="Company 4">
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center pt-20 pb-12">
+        <div class="container mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div data-aos="fade-right" data-aos-duration="1000">
+                    <div
+                        class="inline-flex items-center gap-2 px-4 py-2 bg-brand-500/10 border border-brand-500/30 rounded-full mb-6">
+                        <span class="w-2 h-2 bg-brand-500 rounded-full animate-pulse"></span>
+                        <span class="text-brand-500 text-sm font-medium">#1 WhatsApp Marketing Platform</span>
+                    </div>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+                        Supercharge Your <span class="gradient-text">WhatsApp Marketing</span>
+                    </h1>
+                    <p class="text-lg text-gray-400 mb-8 max-w-xl">
+                        Splash Campaigns is your all-in-one Operations Center for WhatsApp bulk messaging. Featuring
+                        multi-device rotation, smart delays, and advanced contact fetching.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button onclick="smartDownload()" id="heroDownloadBtn"
+                            class="download-btn inline-flex items-center justify-center gap-3 px-8 py-4 bg-brand-600 hover:bg-brand-700 text-white text-lg font-bold rounded-xl transition btn-primary glow-green">
+                            <i class="fas fa-download"></i>
+                            <span class="btn-text">Download Free</span>
+                        </button>
+                        <a href="#screenshots"
+                            class="inline-flex items-center justify-center gap-3 px-8 py-4 glass-card text-white text-lg font-semibold rounded-xl hover:bg-white/10 transition">
+                            <i class="fas fa-play-circle"></i> View Demo
+                        </a>
+                    </div>
+                    <div class="mt-10 flex items-center gap-6">
+                        <div class="flex -space-x-3">
+                            <img src="https://ui-avatars.com/api/?name=John+Smith&background=22c55e&color=fff&size=40"
+                                alt="User" class="w-10 h-10 rounded-full border-2 border-dark-800">
+                            <img src="https://ui-avatars.com/api/?name=Sarah+Johnson&background=3b82f6&color=fff&size=40"
+                                alt="User" class="w-10 h-10 rounded-full border-2 border-dark-800">
+                            <img src="https://ui-avatars.com/api/?name=Mike+Brown&background=8b5cf6&color=fff&size=40"
+                                alt="User" class="w-10 h-10 rounded-full border-2 border-dark-800">
+                            <img src="https://ui-avatars.com/api/?name=Emma+Wilson&background=f59e0b&color=fff&size=40"
+                                alt="User" class="w-10 h-10 rounded-full border-2 border-dark-800">
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i
+                                    class="fas fa-star text-yellow-400"></i><i
+                                    class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i>
+                                <span class="text-white ml-2 font-semibold">5.0</span>
+                            </div>
+                            <p class="text-gray-400 text-sm">From 2,500+ reviews</p>
+                        </div>
+                    </div>
+                </div>
+                <div data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+                    <div class="relative">
+                        <div class="absolute -top-10 -right-10 w-72 h-72 bg-brand-500/20 rounded-full blur-3xl"></div>
+                        <div class="absolute -bottom-10 -left-10 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl"></div>
+                        <div class="glass-card p-2 glow-blue">
+                            <img src="assets/dashboard.png" alt="Splash Campaigns Dashboard"
+                                class="rounded-xl w-full shadow-2xl">
+                        </div>
+                        <div class="absolute -left-6 top-1/4 glass-card px-4 py-3 bg-[#0f172a]/90 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/50"
+                            data-aos="fade-up" data-aos-delay="400">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-brand-500/20 rounded-lg flex items-center justify-center"><i
+                                        class="fas fa-users text-brand-500"></i></div>
+                                <div>
+                                    <p class="text-gray-400 text-xs">Total Contacts</p>
+                                    <p class="text-white font-bold">50,000+</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute -right-6 bottom-1/4 glass-card px-4 py-3 bg-[#0f172a]/90 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/50"
+                            data-aos="fade-up" data-aos-delay="600">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center border border-blue-500/20">
+                                    <i class="fas fa-paper-plane text-blue-500"></i></div>
+                                <div>
+                                    <p class="text-gray-400 text-[10px] uppercase tracking-wider font-semibold">Messages
+                                        Sent</p>
+                                    <p class="text-white font-black text-lg leading-none">1M+</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="features">
-        <div class="features-grid">
-            <div class="feature-card">
-                <img src="assets/dashboard.png" alt="لوحة التحكم">
-                <h3>لوحة تحكم ذكية</h3>
+    <!-- Features Section -->
+    <section id="features" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <span
+                    class="inline-block px-4 py-2 bg-brand-500/10 border border-brand-500/30 rounded-full text-brand-500 text-sm font-medium mb-4">Powerful
+                    Features</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Everything You Need to Succeed</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Our platform is packed with advanced features designed to
+                    help you reach more customers while maintaining the highest safety standards.</p>
             </div>
-            <div class="feature-card">
-                <img src="assets/bulk-sender.png" alt="الإرسال الجماعي">
-                <h3>إرسال جماعي سريع</h3>
-            </div>
-            <div class="feature-card">
-                <img src="assets/contacts.png" alt="إدارة الجهات">
-                <h3>إدارة جهات الاتصال</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glass-card p-8 feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div
+                        class="w-14 h-14 bg-gradient-to-br from-brand-500 to-brand-700 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-shield-alt text-white text-2xl"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-3">Zero Bans Technology</h3>
+                    <p class="text-gray-400">Advanced anti-ban algorithms ensure your accounts stay safe. Our smart
+                        sending patterns mimic human behavior.</p>
+                    <ul class="mt-4 space-y-2">
+                        <li class="flex items-center gap-2 text-gray-300"><i
+                                class="fas fa-check text-brand-500"></i><span>Smart rate limiting</span></li>
+                        <li class="flex items-center gap-2 text-gray-300"><i
+                                class="fas fa-check text-brand-500"></i><span>Human-like sending patterns</span></li>
+                        <li class="flex items-center gap-2 text-gray-300"><i
+                                class="fas fa-check text-brand-500"></i><span>Automatic cooldown system</span></li>
+                    </ul>
+                </div>
+                <div class="glass-card p-8 feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div
+                        class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-mobile-alt text-white text-2xl"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-3">Multi-Device Rotation</h3>
+                    <p class="text-gray-400">Connect and manage multiple WhatsApp devices simultaneously. Rotate between
+                        devices to distribute load.</p>
+                    <ul class="mt-4 space-y-2">
+                        <li class="flex items-center gap-2 text-gray-300"><i
+                                class="fas fa-check text-blue-500"></i><span>Up to 10 devices connected</span></li>
+                        <li class="flex items-center gap-2 text-gray-300"><i
+                                class="fas fa-check text-blue-500"></i><span>Automatic device rotation</span></li>
+                        <li class="flex items-center gap-2 text-gray-300"><i
+                                class="fas fa-check text-blue-500"></i><span>Real-time status monitoring</span></li>
+                    </ul>
+                </div>
+                <div class="glass-card p-8 feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div
+                        class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-clock text-white text-2xl"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-3">Smart Delay System</h3>
+                    <p class="text-gray-400">Intelligent delay algorithms between messages to avoid detection. Set
+                        custom delays per contact list.</p>
+                    <ul class="mt-4 space-y-2">
+                        <li class="flex items-center gap-2 text-gray-300"><i
+                                class="fas fa-check text-purple-500"></i><span>Randomized delay intervals</span></li>
+                        <li class="flex items-center gap-2 text-gray-300"><i
+                                class="fas fa-check text-purple-500"></i><span>Time-based scheduling</span></li>
+                        <li class="flex items-center gap-2 text-gray-300"><i
+                                class="fas fa-check text-purple-500"></i><span>Custom delay rules</span></li>
+                    </ul>
+                </div>
+                <div class="glass-card p-8 feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div
+                        class="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-700 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-address-book text-white text-2xl"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-3">Advanced Contact Fetcher</h3>
+                    <p class="text-gray-400">Easily import and manage your contact lists with automatic deduplication
+                        and validation.</p>
+                    <ul class="mt-4 space-y-2">
+                        <li class="flex items-center gap-2 text-gray-300"><i
+                                class="fas fa-check text-orange-500"></i><span>CSV/Excel import</span></li>
+                        <li class="flex items-center gap-2 text-gray-300"><i
+                                class="fas fa-check text-orange-500"></i><span>Automatic phone validation</span></li>
+                        <li class="flex items-center gap-2 text-gray-300"><i
+                                class="fas fa-check text-orange-500"></i><span>Duplicate removal</span></li>
+                    </ul>
+                </div>
+                <div class="glass-card p-8 feature-card" data-aos="fade-up" data-aos-delay="500">
+                    <div
+                        class="w-14 h-14 bg-gradient-to-br from-pink-500 to-pink-700 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-broadcast-tower text-white text-2xl"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-3">Powerful Bulk Sender</h3>
+                    <p class="text-gray-400">Send bulk messages to thousands of contacts. Support for text, images,
+                        videos, and documents.</p>
+                    <ul class="mt-4 space-y-2">
+                        <li class="flex items-center gap-2 text-gray-300"><i
+                                class="fas fa-check text-pink-500"></i><span>Mass media support</span></li>
+                        <li class="flex items-center gap-2 text-gray-300"><i
+                                class="fas fa-check text-pink-500"></i><span>Personalized variables</span></li>
+                        <li class="flex items-center gap-2 text-gray-300"><i
+                                class="fas fa-check text-pink-500"></i><span>Campaign templates</span></li>
+                    </ul>
+                </div>
+                <div class="glass-card p-8 feature-card" data-aos="fade-up" data-aos-delay="600">
+                    <div
+                        class="w-14 h-14 bg-gradient-to-br from-cyan-500 to-cyan-700 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-chart-line text-white text-2xl"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-3">Advanced Analytics</h3>
+                    <p class="text-gray-400">Track your campaign performance with detailed analytics. Monitor delivery
+                        rates and engagement metrics.</p>
+                    <ul class="mt-4 space-y-2">
+                        <li class="flex items-center gap-2 text-gray-300"><i
+                                class="fas fa-check text-cyan-500"></i><span>Real-time tracking</span></li>
+                        <li class="flex items-center gap-2 text-gray-300"><i
+                                class="fas fa-check text-cyan-500"></i><span>Export reports</span></li>
+                        <li class="flex items-center gap-2 text-gray-300"><i
+                                class="fas fa-check text-cyan-500"></i><span>Performance insights</span></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
 
-    <footer>
-        <p>جميع الحقوق محفوظة &copy; 2026 - **ريدج ريمون (Ridge Rimon)**</p>
+    <!-- Screenshots Section -->
+    <section id="screenshots" class="py-20 bg-dark-800/50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <span
+                    class="inline-block px-4 py-2 bg-blue-500/10 border border-blue-500/30 rounded-full text-blue-500 text-sm font-medium mb-4">App
+                    Screenshots</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">See It In Action</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Take a closer look at our intuitive interface designed for
+                    maximum efficiency and ease of use.</p>
+            </div>
+            <div class="max-w-5xl mx-auto">
+                <div class="screenshot-slider" data-aos="zoom-in">
+                    <div class="screenshot-slide active">
+                        <div class="glass-card p-4"><img src="assets/dashboard.png" alt="Main Dashboard"
+                                class="rounded-xl w-full"></div>
+                        <p class="text-center text-gray-400 mt-4">Main Dashboard - Overview & Analytics</p>
+                    </div>
+                    <div class="screenshot-slide">
+                        <div class="glass-card p-4"><img src="assets/login.png" alt="Login Screen"
+                                class="rounded-xl w-full"></div>
+                        <p class="text-center text-gray-400 mt-4">Secure Login Interface</p>
+                    </div>
+                    <div class="screenshot-slide">
+                        <div class="glass-card p-4"><img src="assets/bulk-sender.png" alt="Bulk Sender"
+                                class="rounded-xl w-full"></div>
+                        <p class="text-center text-gray-400 mt-4">Bulk Message Sender</p>
+                    </div>
+                    <div class="screenshot-slide">
+                        <div class="glass-card p-4"><img src="assets/devices.png" alt="Device Management"
+                                class="rounded-xl w-full"></div>
+                        <p class="text-center text-gray-400 mt-4">Multi-Device Management</p>
+                    </div>
+                    <div class="screenshot-slide">
+                        <div class="glass-card p-4"><img src="assets/contacts.png" alt="Contact Fetcher"
+                                class="rounded-xl w-full"></div>
+                        <p class="text-center text-gray-400 mt-4">Contact Management & Fetcher</p>
+                    </div>
+                </div>
+                <div class="flex justify-center items-center gap-4 mt-8">
+                    <button id="prevBtn"
+                        class="w-12 h-12 glass-card hover:bg-white/10 rounded-full flex items-center justify-center transition"><i
+                            class="fas fa-chevron-left text-white"></i></button>
+                    <div class="slider-dots">
+                        <div class="slider-dot active" data-slide="0"></div>
+                        <div class="slider-dot" data-slide="1"></div>
+                        <div class="slider-dot" data-slide="2"></div>
+                        <div class="slider-dot" data-slide="3"></div>
+                        <div class="slider-dot" data-slide="4"></div>
+                    </div>
+                    <button id="nextBtn"
+                        class="w-12 h-12 glass-card hover:bg-white/10 rounded-full flex items-center justify-center transition"><i
+                            class="fas fa-chevron-right text-white"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <span
+                    class="inline-block px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full text-purple-500 text-sm font-medium mb-4">Testimonials</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Trusted by Marketing Professionals</h2>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glass-card p-8 testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-center gap-1 mb-4"><i class="fas fa-star text-yellow-400"></i><i
+                            class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i
+                            class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i></div>
+                    <p class="text-gray-300 mb-6">"Splash Campaigns has transformed our WhatsApp marketing completely.
+                        The multi-device rotation feature is a game-changer - we've increased our outreach by 300%
+                        without any bans."</p>
+                    <div class="flex items-center gap-4"><img
+                            src="https://ui-avatars.com/api/?name=Ahmed+Hassan&background=22c55e&color=fff&size=50"
+                            alt="Ahmed Hassan" class="w-12 h-12 rounded-full">
+                        <div>
+                            <h4 class="text-white font-semibold">Ahmed Hassan</h4>
+                            <p class="text-gray-400 text-sm">Marketing Manager</p>
+                            <p class="text-brand-500 text-sm">TechCorp Egypt</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card p-8 testimonial-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex items-center gap-1 mb-4"><i class="fas fa-star text-yellow-400"></i><i
+                            class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i
+                            class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i></div>
+                    <p class="text-gray-300 mb-6">"The zero-bans technology is incredible. We've been using Splash
+                        Campaigns for 8 months now and not a single account suspension."</p>
+                    <div class="flex items-center gap-4"><img
+                            src="https://ui-avatars.com/api/?name=Sarah+Mahmoud&background=3b82f6&color=fff&size=50"
+                            alt="Sarah Mahmoud" class="w-12 h-12 rounded-full">
+                        <div>
+                            <h4 class="text-white font-semibold">Sarah Mahmoud</h4>
+                            <p class="text-gray-400 text-sm">Operations Director</p>
+                            <p class="text-blue-500 text-sm">Digital Bridge Co.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card p-8 testimonial-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="flex items-center gap-1 mb-4"><i class="fas fa-star text-yellow-400"></i><i
+                            class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i
+                            class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i></div>
+                    <p class="text-gray-300 mb-6">"Best investment for our business! The contact fetcher saved us
+                        countless hours, and the bulk sender handles our 50,000+ contacts effortlessly."</p>
+                    <div class="flex items-center gap-4"><img
+                            src="https://ui-avatars.com/api/?name=Omar+Abdelrahman&background=8b5cf6&color=fff&size=50"
+                            alt="Omar Abdelrahman" class="w-12 h-12 rounded-full">
+                        <div>
+                            <h4 class="text-white font-semibold">Omar Abdelrahman</h4>
+                            <p class="text-gray-400 text-sm">CEO</p>
+                            <p class="text-purple-500 text-sm">GrowthMarketing MENA</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="py-20 bg-dark-800/50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <span
+                    class="inline-block px-4 py-2 bg-brand-500/10 border border-brand-500/30 rounded-full text-brand-500 text-sm font-medium mb-4">Pricing
+                    Plans</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Choose Your Plan</h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="glass-card pricing-card p-8" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-white mb-2">Free Demo</h3>
+                        <p class="text-gray-400">Try before you buy</p>
+                        <div class="mt-6"><span class="text-4xl font-bold text-white">24</span><span
+                                class="text-gray-400"> Hours</span></div>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center gap-3 text-gray-300"><i
+                                class="fas fa-check text-brand-500"></i><span>1 Device Connection</span></li>
+                        <li class="flex items-center gap-3 text-gray-300"><i
+                                class="fas fa-check text-brand-500"></i><span>Basic Features</span></li>
+                    </ul>
+                    <button onclick="smartDownload()"
+                        class="block w-full py-4 border-2 border-brand-500 text-brand-500 text-center font-bold rounded-xl hover:bg-brand-500 hover:text-white transition">
+                        <i class="fas fa-download mr-2"></i>Download Free Demo
+                    </button>
+                </div>
+                <div class="glass-card pricing-card p-8 relative glow-green" data-aos="fade-up" data-aos-delay="200">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2"><span
+                            class="px-4 py-1 bg-brand-500 text-white text-sm font-bold rounded-full">Most Popular</span>
+                    </div>
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-white mb-2">Enterprise</h3>
+                        <p class="text-gray-400">For serious marketers</p>
+                        <div class="mt-6"><span class="text-4xl font-bold text-white">10$</span><span
+                                class="text-gray-400">/month</span></div>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center gap-3 text-gray-300"><i
+                                class="fas fa-check text-brand-500"></i><span>Unlimited Devices</span></li>
+                        <li class="flex items-center gap-3 text-gray-300"><i
+                                class="fas fa-check text-brand-500"></i><span>Unlimited Contacts</span></li>
+                        <li class="flex items-center gap-3 text-gray-300"><i
+                                class="fas fa-check text-brand-500"></i><span>Unlimited Messages</span></li>
+                        <li class="flex items-center gap-3 text-gray-300"><i
+                                class="fas fa-check text-brand-500"></i><span>Priority Support</span></li>
+                        <li class="flex items-center gap-3 text-gray-300"><i
+                                class="fas fa-check text-brand-500"></i><span>Dedicated Account Manager</span></li>
+                    </ul>
+                    <a href="https://wa.me/201007985700"
+                        class="block w-full py-4 bg-brand-600 text-white text-center font-bold rounded-xl hover:bg-brand-700 transition btn-primary">
+                        <i class="fab fa-whatsapp mr-2"></i>Contact Support
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="glass-card p-12 text-center relative overflow-hidden" data-aos="zoom-in">
+                <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-brand-500/10 to-blue-500/10">
+                </div>
+                <div class="absolute -top-20 -right-20 w-40 h-40 bg-brand-500/20 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl"></div>
+                <div class="relative z-10">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Ready to Transform Your WhatsApp
+                        Marketing?</h2>
+                    <p class="text-gray-400 mb-8 max-w-2xl mx-auto">Join thousands of businesses already using Splash
+                        Campaigns.</p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button onclick="smartDownload()"
+                            class="inline-flex items-center justify-center gap-3 px-8 py-4 bg-brand-600 hover:bg-brand-700 text-white text-lg font-bold rounded-xl transition btn-primary">
+                            <i class="fas fa-download"></i><span id="ctaDownloadText">Download Now</span>
+                        </button>
+                        <a href="https://wa.me/201007985700"
+                            class="inline-flex items-center justify-center gap-3 px-8 py-4 glass-card hover:bg-white/10 text-white text-lg font-semibold rounded-xl transition">
+                            <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-dark-700">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div class="md:col-span-2">
+                    <a href="#" class="flex items-center gap-3 mb-4">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center">
+                            <i class="fab fa-whatsapp text-white text-xl"></i></div>
+                        <span class="text-xl font-bold text-white">Splash Campaigns</span>
+                    </a>
+                    <p class="text-gray-400 max-w-md">Professional WhatsApp Marketing Platform with multi-device
+                        rotation, smart delays, and zero-bans technology.</p>
+                    <div class="flex gap-4 mt-6">
+                        <a href="https://wa.me/201007985700"
+                            class="w-10 h-10 glass-card hover:bg-brand-500/20 rounded-lg flex items-center justify-center transition"><i
+                                class="fab fa-whatsapp text-brand-500"></i></a>
+                        <a href="#"
+                            class="w-10 h-10 glass-card hover:bg-blue-500/20 rounded-lg flex items-center justify-center transition"><i
+                                class="fab fa-facebook text-blue-500"></i></a>
+                        <a href="#"
+                            class="w-10 h-10 glass-card hover:bg-sky-500/20 rounded-lg flex items-center justify-center transition"><i
+                                class="fab fa-twitter text-sky-500"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#features" class="text-gray-400 hover:text-brand-500 transition">Features</a></li>
+                        <li><a href="#screenshots" class="text-gray-400 hover:text-brand-500 transition">Screenshots</a>
+                        </li>
+                        <li><a href="#testimonials"
+                                class="text-gray-400 hover:text-brand-500 transition">Testimonials</a></li>
+                        <li><a href="#pricing" class="text-gray-400 hover:text-brand-500 transition">Pricing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-brand-500 transition">Documentation</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-brand-500 transition">FAQs</a></li>
+                        <li><a href="https://wa.me/201007985700"
+                                class="text-gray-400 hover:text-brand-500 transition">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-dark-700 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-400 text-sm">© 2024 Splash Campaigns. All rights reserved.</p>
+                <div class="flex items-center gap-2">
+                    <span class="text-gray-400 text-sm">WhatsApp Support:</span>
+                    <a href="https://wa.me/201007985700"
+                        class="text-brand-500 hover:text-brand-400 font-semibold flex items-center gap-2"><i
+                            class="fab fa-whatsapp"></i> +20 100 798 5700</a>
+                </div>
+            </div>
+        </div>
     </footer>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true, offset: 100 });
+
+        const REPO = 'ridgerimon/splash-campaigns-releases';
+        let winUrl = null;
+        let linuxUrl = null;
+        const isWindows = navigator.userAgent.includes('Windows');
+        const isLinux = navigator.userAgent.includes('Linux') && !navigator.userAgent.includes('Android');
+
+        // Fetch latest release info
+        fetch(`https://api.github.com/repos/${REPO}/releases/latest`)
+            .then(r => r.json())
+            .then(data => {
+                const assets = data.assets || [];
+                const exe = assets.find(a => a.name.endsWith('.exe') && !a.name.includes('blockmap'));
+                const appimage = assets.find(a => a.name.endsWith('.AppImage'));
+                winUrl = exe?.browser_download_url;
+                linuxUrl = appimage?.browser_download_url;
+
+                // Update button text based on OS
+                const heroBtn = document.getElementById('heroDownloadBtn');
+                const ctaText = document.getElementById('ctaDownloadText');
+                if (isWindows && winUrl) {
+                    heroBtn.innerHTML = '<i class="fab fa-windows mr-2"></i><span>Download for Windows</span>';
+                    if (ctaText) ctaText.textContent = 'Download for Windows';
+                } else if (isLinux && linuxUrl) {
+                    heroBtn.innerHTML = '<i class="fab fa-linux mr-2"></i><span>Download for Linux</span>';
+                    if (ctaText) ctaText.textContent = 'Download for Linux';
+                } else {
+                    heroBtn.innerHTML = '<i class="fas fa-download mr-2"></i><span>Download Free</span>';
+                }
+            })
+            .catch(() => { });
+
+        function smartDownload() {
+            if (isWindows && winUrl) {
+                window.location.href = winUrl;
+            } else if (isLinux && linuxUrl) {
+                window.location.href = linuxUrl;
+            } else if (winUrl) {
+                window.location.href = winUrl;
+            } else {
+                window.open(`https://github.com/${REPO}/releases/latest`, '_blank');
+            }
+        }
+
+        // Navbar scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Mobile menu
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        });
+        document.getElementById('mobileMenu').querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('click', () => document.getElementById('mobileMenu').classList.add('hidden'));
+        });
+
+        // Screenshot slider
+        const slides = document.querySelectorAll('.screenshot-slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            slides.forEach((s, i) => { s.classList.remove('active'); dots[i].classList.remove('active'); });
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentSlide = index;
+        }
+
+        document.getElementById('nextBtn').addEventListener('click', () => showSlide((currentSlide + 1) % slides.length));
+        document.getElementById('prevBtn').addEventListener('click', () => showSlide((currentSlide - 1 + slides.length) % slides.length));
+        dots.forEach((dot, i) => dot.addEventListener('click', () => showSlide(i)));
+        setInterval(() => showSlide((currentSlide + 1) % slides.length), 5000);
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
 </body>
 
 </html>
