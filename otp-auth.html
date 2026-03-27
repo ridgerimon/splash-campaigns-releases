@@ -58,7 +58,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-        import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+        import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, PhoneAuthProvider, signInWithCredential } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -121,22 +121,22 @@
             const code = error?.code || '';
 
             if (code === 'auth/invalid-verification-code') {
-                return 'The code is incorrect. Please enter the latest code you received.';
+                return 'The code is incorrect. Please enter the latest code you received. (auth/invalid-verification-code)';
             }
 
             if (code === 'auth/code-expired') {
-                return 'This code has expired. Please request a new one.';
+                return 'This code has expired. Please request a new one. (auth/code-expired)';
             }
 
             if (code === 'auth/session-expired') {
-                return 'Your verification session expired. Please request a new code.';
+                return 'Your verification session expired. Please request a new code. (auth/session-expired)';
             }
 
             if (code === 'auth/too-many-requests') {
-                return 'Too many attempts. Please wait a little, then try again.';
+                return 'Too many attempts. Please wait a little, then try again. (auth/too-many-requests)';
             }
 
-            return `Verification failed: ${error?.message || 'Unknown error.'}`;
+            return `Verification failed${code ? ` (${code})` : ''}: ${error?.message || 'Unknown error.'}`;
         }
 
         window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
@@ -147,6 +147,7 @@
         });
 
         let confirmationResult;
+        let verificationId = sessionStorage.getItem(`otp_verification_${sessionToken}`) || '';
         let resendCooldown = null;
         let resendSeconds = 0;
 
@@ -197,6 +198,10 @@
 
             try {
                 confirmationResult = await signInWithPhoneNumber(auth, phone, window.recaptchaVerifier);
+                verificationId = confirmationResult.verificationId || '';
+                if (verificationId) {
+                    sessionStorage.setItem(`otp_verification_${sessionToken}`, verificationId);
+                }
                 setupView.classList.add('hidden');
                 verifyView.classList.remove('hidden');
                 otpInput.value = '';
@@ -231,16 +236,17 @@
         };
 
         verifyOtpBtn.onclick = async () => {
-            const code = otpInput.value.trim();
+            const code = otpInput.value.replace(/\D/g, '');
             if (code.length !== 6) return showError("Please enter a 6-digit code.");
-            if (!confirmationResult) return showError("No active verification request. Please resend the code.");
+            if (!verificationId) return showError("No active verification request. Please resend the code.");
 
             errorMsg.classList.add('hidden');
             verifyOtpBtn.disabled = true;
             verifyOtpBtn.innerText = "Verifying...";
 
             try {
-                const result = await confirmationResult.confirm(code);
+                const credential = PhoneAuthProvider.credential(verificationId, code);
+                const result = await signInWithCredential(auth, credential);
                 const user = result.user;
 
                 try {
@@ -255,6 +261,7 @@
 
                     verifyView.classList.add('hidden');
                     successView.classList.remove('hidden');
+                    sessionStorage.removeItem(`otp_verification_${sessionToken}`);
                 } catch (sessionError) {
                     console.error(sessionError);
                     showError(`Phone verified, but linking the app session failed: ${sessionError?.message || 'Unknown error.'}`);
