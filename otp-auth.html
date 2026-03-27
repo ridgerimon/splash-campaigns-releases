@@ -72,8 +72,23 @@
         const db = getFirestore(app);
 
         const urlParams = new URLSearchParams(window.location.search);
-        const phone = urlParams.get('phone');
+        const rawPhone = urlParams.get('phone');
         const sessionToken = urlParams.get('session');
+
+        const normalizePhone = (value) => {
+            const raw = (value || '').trim();
+            if (!raw) return '';
+
+            const digits = raw.replace(/\D/g, '');
+
+            if (raw.startsWith('+')) return `+${digits}`;
+            if (digits.startsWith('20')) return `+${digits}`;
+            if (digits.startsWith('0')) return `+20${digits.slice(1)}`;
+
+            return `+${digits}`;
+        };
+
+        const phone = normalizePhone(rawPhone);
 
         const displayPhone = document.getElementById('display-phone');
         const errorMsg = document.getElementById('error-msg');
