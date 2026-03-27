@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Phone - Splash Campaigns</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Syne', sans-serif; background-color: #080810; color: white; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-md w-full bg-[#0d0d1a] border border-[#1a1a2e] rounded-3xl p-8 shadow-2xl">
+        <div class="flex flex-col items-center mb-8">
+            <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-4 shadow-lg shadow-indigo-500/20">
+                💦
+            </div>
+            <h1 class="text-2xl font-extrabold text-center">Splash Campaigns</h1>
+            <p class="text-gray-500 text-xs mono mt-2 tracking-widest uppercase">Phone Verification</p>
+        </div>
+
+        <div id="setup-view">
+            <p class="text-gray-400 text-sm mb-6 text-center leading-relaxed">
+                We're ready to send a verification code to <br>
+                <span id="display-phone" class="text-indigo-400 font-bold text-lg">...</span>
+            </p>
+            <div id="recaptcha-container" class="flex justify-center mb-6"></div>
+            <button id="send-otp-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-indigo-600/20 disabled:opacity-50 disabled:cursor-not-allowed">
+                Send Verification Code
+            </button>
+        </div>
+
+        <div id="verify-view" class="hidden">
+            <p class="text-gray-400 text-sm mb-6 text-center">
+                Enter the 6-digit code sent to your phone.
+            </p>
+            <input type="text" id="otp-input" maxlength="6" placeholder="000000"
+                class="w-full bg-[#0a0a14] border-2 border-[#1e1e30] rounded-xl py-4 text-center text-2xl mono tracking-[1em] focus:border-indigo-500 focus:outline-none transition-all mb-6">
+            <button id="verify-otp-btn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-emerald-600/20">
+                Verify & Continue
+            </button>
+        </div>
+
+        <div id="success-view" class="hidden text-center">
+            <div class="text-5xl mb-4">✅</div>
+            <h2 class="text-xl font-bold mb-2">Verified Successfully!</h2>
+            <p class="text-gray-400 text-sm mono">You can now return to the Splash Campaigns app.</p>
+        </div>
+
+        <div id="error-msg" class="mt-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs mono hidden"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD-M2GMxUlNdQrxvOKHQMDohMecQiq3Sx0",
+            authDomain: "whatsapp-app-7f17e.firebaseapp.com",
+            projectId: "whatsapp-app-7f17e",
+            storageBucket: "whatsapp-app-7f17e.firebasestorage.app",
+            messagingSenderId: "283081023406",
+            appId: "1:283081023406:web:a9a608245cb512a051b23f",
+            measurementId: "G-7SJJH02140"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const phone = urlParams.get('phone');
+        const sessionToken = urlParams.get('session');
+
+        const displayPhone = document.getElementById('display-phone');
+        const errorMsg = document.getElementById('error-msg');
+        const setupView = document.getElementById('setup-view');
+        const verifyView = document.getElementById('verify-view');
+        const successView = document.getElementById('success-view');
+        const sendOtpBtn = document.getElementById('send-otp-btn');
+        const verifyOtpBtn = document.getElementById('verify-otp-btn');
+        const otpInput = document.getElementById('otp-input');
+
+        if (!phone || !sessionToken) {
+            showError("Invalid session. Please restart the process in the app.");
+            sendOtpBtn.disabled = true;
+        } else {
+            displayPhone.innerText = phone;
+        }
+
+        function showError(msg) {
+            errorMsg.innerText = msg;
+            errorMsg.classList.remove('hidden');
+        }
+
+        window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+            'size': 'normal',
+            'callback': (response) => {
+                // reCAPTCHA solved
+            }
+        });
+
+        let confirmationResult;
+
+        sendOtpBtn.onclick = async () => {
+            errorMsg.classList.add('hidden');
+            sendOtpBtn.disabled = true;
+            sendOtpBtn.innerText = "Sending...";
+
+            try {
+                confirmationResult = await signInWithPhoneNumber(auth, phone, window.recaptchaVerifier);
+                setupView.classList.add('hidden');
+                verifyView.classList.remove('hidden');
+            } catch (error) {
+                console.error(error);
+                showError("Error: " + error.message);
+                sendOtpBtn.disabled = false;
+                sendOtpBtn.innerText = "Send Verification Code";
+            }
+        };
+
+        verifyOtpBtn.onclick = async () => {
+            const code = otpInput.value.trim();
+            if (code.length !== 6) return showError("Please enter a 6-digit code.");
+
+            errorMsg.classList.add('hidden');
+            verifyOtpBtn.disabled = true;
+            verifyOtpBtn.innerText = "Verifying...";
+
+            try {
+                const result = await confirmationResult.confirm(code);
+                const user = result.user;
+                const idToken = await user.getIdToken();
+
+                await setDoc(doc(db, "auth_sessions", sessionToken), {
+                    status: "verified",
+                    uid: user.uid,
+                    token: idToken,
+                    createdAt: serverTimestamp()
+                });
+
+                verifyView.classList.add('hidden');
+                successView.classList.remove('hidden');
+            } catch (error) {
+                console.error(error);
+                showError("Invalid code. Please try again.");
+                verifyOtpBtn.disabled = false;
+                verifyOtpBtn.innerText = "Verify & Continue";
+            }
+        };
+    </script>
+</body>
+</html>
