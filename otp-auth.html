@@ -41,6 +41,10 @@
             <button id="verify-otp-btn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-emerald-600/20">
                 Verify & Continue
             </button>
+            <button id="resend-otp-btn" class="w-full mt-3 bg-transparent border border-[#2a2a44] hover:border-indigo-500 text-gray-300 font-bold py-3 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                Resend Code
+            </button>
+            <p id="resend-hint" class="text-gray-500 text-xs mono text-center mt-3 hidden"></p>
         </div>
 
         <div id="success-view" class="hidden text-center">
@@ -97,6 +101,8 @@
         const successView = document.getElementById('success-view');
         const sendOtpBtn = document.getElementById('send-otp-btn');
         const verifyOtpBtn = document.getElementById('verify-otp-btn');
+        const resendOtpBtn = document.getElementById('resend-otp-btn');
+        const resendHint = document.getElementById('resend-hint');
         const otpInput = document.getElementById('otp-input');
 
         if (!phone || !sessionToken) {
@@ -119,22 +125,87 @@
         });
 
         let confirmationResult;
+        let resendCooldown = null;
+        let resendSeconds = 0;
 
-        sendOtpBtn.onclick = async () => {
+        function setResendState(seconds) {
+            if (resendCooldown) clearInterval(resendCooldown);
+
+            resendSeconds = seconds;
+            if (seconds <= 0) {
+                resendOtpBtn.disabled = false;
+                resendOtpBtn.innerText = "Resend Code";
+                resendHint.classList.add('hidden');
+                resendHint.innerText = '';
+                return;
+            }
+
+            resendOtpBtn.disabled = true;
+            resendHint.classList.remove('hidden');
+            resendHint.innerText = `You can request a new code in ${resendSeconds}s`;
+
+            resendCooldown = setInterval(() => {
+                resendSeconds -= 1;
+                if (resendSeconds <= 0) {
+                    clearInterval(resendCooldown);
+                    resendCooldown = null;
+                    resendOtpBtn.disabled = false;
+                    resendOtpBtn.innerText = "Resend Code";
+                    resendHint.classList.add('hidden');
+                    resendHint.innerText = '';
+                    return;
+                }
+
+                resendHint.innerText = `You can request a new code in ${resendSeconds}s`;
+            }, 1000);
+        }
+
+        async function requestOtp(options = {}) {
+            const isResend = options.isResend === true;
+
             errorMsg.classList.add('hidden');
             sendOtpBtn.disabled = true;
-            sendOtpBtn.innerText = "Sending...";
+            resendOtpBtn.disabled = true;
+
+            if (isResend) {
+                resendOtpBtn.innerText = "Resending...";
+            } else {
+                sendOtpBtn.innerText = "Sending...";
+            }
 
             try {
                 confirmationResult = await signInWithPhoneNumber(auth, phone, window.recaptchaVerifier);
                 setupView.classList.add('hidden');
                 verifyView.classList.remove('hidden');
+                otpInput.value = '';
+                otpInput.focus();
+                setResendState(30);
             } catch (error) {
                 console.error(error);
                 showError("Error: " + error.message);
                 sendOtpBtn.disabled = false;
                 sendOtpBtn.innerText = "Send Verification Code";
+                resendOtpBtn.disabled = false;
+                resendOtpBtn.innerText = "Resend Code";
+
+                if (window.recaptchaVerifier?.render) {
+                    try {
+                        const widgetId = await window.recaptchaVerifier.render();
+                        window.grecaptcha?.reset(widgetId);
+                    } catch (resetError) {
+                        console.error('reCAPTCHA reset error:', resetError);
+                    }
+                }
             }
+        }
+
+        sendOtpBtn.onclick = async () => {
+            await requestOtp();
+        };
+
+        resendOtpBtn.onclick = async () => {
+            if (resendOtpBtn.disabled) return;
+            await requestOtp({ isResend: true });
         };
 
         verifyOtpBtn.onclick = async () => {
