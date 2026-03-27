@@ -150,6 +150,8 @@
         let verificationId = sessionStorage.getItem(`otp_verification_${sessionToken}`) || '';
         let resendCooldown = null;
         let resendSeconds = 0;
+        let rateLimitCooldown = null;
+        let rateLimitSeconds = 0;
 
         function setResendState(seconds) {
             if (resendCooldown) clearInterval(resendCooldown);
@@ -183,6 +185,36 @@
             }, 1000);
         }
 
+        function setRateLimitState(seconds) {
+            if (rateLimitCooldown) clearInterval(rateLimitCooldown);
+
+            rateLimitSeconds = seconds;
+            sendOtpBtn.disabled = true;
+            resendOtpBtn.disabled = true;
+            sendOtpBtn.innerText = "Try Again Later";
+            resendOtpBtn.innerText = "Rate Limited";
+            resendHint.classList.remove('hidden');
+            resendHint.innerText = `Too many attempts. Try again in ${rateLimitSeconds}s`;
+
+            rateLimitCooldown = setInterval(() => {
+                rateLimitSeconds -= 1;
+
+                if (rateLimitSeconds <= 0) {
+                    clearInterval(rateLimitCooldown);
+                    rateLimitCooldown = null;
+                    sendOtpBtn.disabled = false;
+                    resendOtpBtn.disabled = false;
+                    sendOtpBtn.innerText = "Send Verification Code";
+                    resendOtpBtn.innerText = "Resend Code";
+                    resendHint.classList.add('hidden');
+                    resendHint.innerText = '';
+                    return;
+                }
+
+                resendHint.innerText = `Too many attempts. Try again in ${rateLimitSeconds}s`;
+            }, 1000);
+        }
+
         async function requestOtp(options = {}) {
             const isResend = options.isResend === true;
 
@@ -210,10 +242,14 @@
             } catch (error) {
                 console.error(error);
                 showError("Error: " + error.message);
-                sendOtpBtn.disabled = false;
-                sendOtpBtn.innerText = "Send Verification Code";
-                resendOtpBtn.disabled = false;
-                resendOtpBtn.innerText = "Resend Code";
+                if (error?.code === 'auth/too-many-requests') {
+                    setRateLimitState(60);
+                } else {
+                    sendOtpBtn.disabled = false;
+                    sendOtpBtn.innerText = "Send Verification Code";
+                    resendOtpBtn.disabled = false;
+                    resendOtpBtn.innerText = "Resend Code";
+                }
 
                 if (window.recaptchaVerifier?.render) {
                     try {
@@ -269,6 +305,9 @@
             } catch (error) {
                 console.error(error);
                 showError(getVerificationErrorMessage(error));
+                if (error?.code === 'auth/too-many-requests') {
+                    setRateLimitState(60);
+                }
             } finally {
                 verifyOtpBtn.disabled = false;
                 verifyOtpBtn.innerText = "Verify & Continue";
