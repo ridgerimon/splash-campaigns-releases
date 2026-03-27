@@ -117,6 +117,28 @@
             errorMsg.classList.remove('hidden');
         }
 
+        function getVerificationErrorMessage(error) {
+            const code = error?.code || '';
+
+            if (code === 'auth/invalid-verification-code') {
+                return 'The code is incorrect. Please enter the latest code you received.';
+            }
+
+            if (code === 'auth/code-expired') {
+                return 'This code has expired. Please request a new one.';
+            }
+
+            if (code === 'auth/session-expired') {
+                return 'Your verification session expired. Please request a new code.';
+            }
+
+            if (code === 'auth/too-many-requests') {
+                return 'Too many attempts. Please wait a little, then try again.';
+            }
+
+            return `Verification failed: ${error?.message || 'Unknown error.'}`;
+        }
+
         window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
             'size': 'normal',
             'callback': (response) => {
@@ -211,6 +233,7 @@
         verifyOtpBtn.onclick = async () => {
             const code = otpInput.value.trim();
             if (code.length !== 6) return showError("Please enter a 6-digit code.");
+            if (!confirmationResult) return showError("No active verification request. Please resend the code.");
 
             errorMsg.classList.add('hidden');
             verifyOtpBtn.disabled = true;
@@ -219,20 +242,27 @@
             try {
                 const result = await confirmationResult.confirm(code);
                 const user = result.user;
-                const idToken = await user.getIdToken();
 
-                await setDoc(doc(db, "auth_sessions", sessionToken), {
-                    status: "verified",
-                    uid: user.uid,
-                    token: idToken,
-                    createdAt: serverTimestamp()
-                });
+                try {
+                    const idToken = await user.getIdToken();
 
-                verifyView.classList.add('hidden');
-                successView.classList.remove('hidden');
+                    await setDoc(doc(db, "auth_sessions", sessionToken), {
+                        status: "verified",
+                        uid: user.uid,
+                        token: idToken,
+                        createdAt: serverTimestamp()
+                    });
+
+                    verifyView.classList.add('hidden');
+                    successView.classList.remove('hidden');
+                } catch (sessionError) {
+                    console.error(sessionError);
+                    showError(`Phone verified, but linking the app session failed: ${sessionError?.message || 'Unknown error.'}`);
+                }
             } catch (error) {
                 console.error(error);
-                showError("Invalid code. Please try again.");
+                showError(getVerificationErrorMessage(error));
+            } finally {
                 verifyOtpBtn.disabled = false;
                 verifyOtpBtn.innerText = "Verify & Continue";
             }
